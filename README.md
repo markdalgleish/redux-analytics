@@ -51,6 +51,10 @@ const middleware = analytics(({ type, payload }, shared) => {
 
 In order to streamline the management of the shared `analytics` data, it's recommended that you write a dedicated analytics reducer with the help of the [combineReducers](https://rackt.github.io/redux/docs/api/combineReducers.html) function.
 
+## Thanks
+
+[@pavelvolek](https://github.com/pavelvolek) and [@arturmuller](https://github.com/arturmuller) for providing the initial inspiration with [redux-keen](https://github.com/pavelvolek/redux-keen).
+
 ## License
 
 [MIT License](http://markdalgleish.mit-license.org/)
