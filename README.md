@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/markdalgleish/redux-analytics/master.svg?style=flat-square)](http://travis-ci.org/markdalgleish/redux-analytics) [![npm](https://img.shields.io/npm/v/redux-analytics.svg?style=flat-square)](https://www.npmjs.com/package/redux-analytics)
+
 # redux-analytics
 
 Analytics middleware for [Redux](https://github.com/rackt/redux).
