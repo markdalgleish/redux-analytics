@@ -44,7 +44,7 @@ If you need to expose shared analytics data to multiple events, the `analytics` 
 import analytics from 'redux-analytics';
 import track from 'my-awesome-analytics-library';
 
-const middleware = analytics({ type, payload }, shared => {
+const middleware = analytics(({ type, payload }, shared) => {
   track(type, { ...shared, ...payload });
 });
 ```
