@@ -35,7 +35,7 @@ Then, write the middleware to handle the presence of this metadata:
 import analytics from 'redux-analytics';
 import track from 'my-awesome-analytics-library';
 
-const middleware = analytics({ type, payload } => track(type, payload));
+const middleware = analytics(({ type, payload }) => track(type, payload));
 ```
 
 If you need to expose shared analytics data to multiple events, your entire state tree is provided as the second argument.
