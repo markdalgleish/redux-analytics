@@ -11,13 +11,13 @@ describe('Given: A Store with analytics middleware', () => {
   beforeEach(() => {
     eventCallbackSpy = spy();
     const createStoreWithMiddleware = applyMiddleware(analytics(eventCallbackSpy))(createStore);
-    const initialState = { ignore: 'me', analytics: { abc: 123 } };
+    const initialState = { name: 'jane smith', loggedIn: false };
     const reducer = (state = initialState, action) => {
       switch (action.type) {
-        case 'ADD_SOMETHING': {
+        case 'LOGIN': {
           return {
             ...state,
-            analytics: { ...state.analytics, added: true }
+            loggedIn: true
           };
         }
 
@@ -32,20 +32,20 @@ describe('Given: A Store with analytics middleware', () => {
   describe('When: An action with analytics meta is dispatched', () => {
 
     beforeEach(() => store.dispatch({
-      type: 'FOO',
+      type: 'ROUTE_CHANGE',
       meta: {
-        analytics: { type: 'some-event' }
+        analytics: { type: 'page-load' }
       }
     }));
 
     it('Then: It should invoke the tracking callback with the meta as the first argument', () => {
       const [ meta ] = eventCallbackSpy.getCall(0).args;
-      assert.deepEqual(meta, { type: 'some-event' });
+      assert.deepEqual(meta, { type: 'page-load' });
     });
 
-    it('Then: It should invoke the tracking callback with the analytics state as the second argument', () => {
+    it('Then: It should invoke the tracking callback with the current state as the second argument', () => {
       const [, analyticsState ] = eventCallbackSpy.getCall(0).args;
-      assert.deepEqual(analyticsState, { abc: 123 });
+      assert.deepEqual(analyticsState, { name: 'jane smith', loggedIn: false });
     });
 
     it('Then: It should only invoke the tracking callback once', () => {
@@ -57,7 +57,7 @@ describe('Given: A Store with analytics middleware', () => {
   describe('When: An action with analytics meta is dispatched that updates state', () => {
 
     beforeEach(() => store.dispatch({
-      type: 'ADD_SOMETHING',
+      type: 'LOGIN',
       meta: {
         analytics: { type: 'foobar' }
       }
@@ -65,7 +65,7 @@ describe('Given: A Store with analytics middleware', () => {
 
     it('Then: The new state should be available to the analytics middleware callback', () => {
       const [, analyticsState ] = eventCallbackSpy.getCall(0).args;
-      assert.deepEqual(analyticsState, { abc: 123, 'added': true });
+      assert.deepEqual(analyticsState, { name: 'jane smith', loggedIn: true });
     });
 
   });
@@ -73,7 +73,7 @@ describe('Given: A Store with analytics middleware', () => {
   describe('When: An action without meta is dispatched', () => {
 
     beforeEach(() => store.dispatch({
-      type: 'FOO'
+      type: 'SOME_OTHER_EVENT'
     }));
 
     it('Then: It should not invoke the tracking callback', () => {
@@ -85,8 +85,8 @@ describe('Given: A Store with analytics middleware', () => {
   describe('When: An action with meta is dispatched, but the meta does not contain an analytics object', () => {
 
     beforeEach(() => store.dispatch({
-      type: 'FOO',
-      meta: { type: 'foobar' }
+      type: 'SOME_OTHER_EVENT',
+      meta: { not: 'analytics' }
     }));
 
     it('Then: It should not invoke the tracking callback', () => {
@@ -98,7 +98,7 @@ describe('Given: A Store with analytics middleware', () => {
   describe('When: An action with meta is dispatched, but the meta is not a Flux Standard Action', () => {
 
     beforeEach(() => store.dispatch({
-      type: 'FOO',
+      type: 'SOME_OTHER_EVENT',
       meta: {
         analytics: {
           not: 'a flux standard action'

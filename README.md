@@ -38,18 +38,16 @@ import track from 'my-awesome-analytics-library';
 const middleware = analytics({ type, payload } => track(type, payload));
 ```
 
-If you need to expose shared analytics data to multiple events, the `analytics` property of your state tree is provided as the second argument.
+If you need to expose shared analytics data to multiple events, your entire state tree is provided as the second argument.
 
 ```js
 import analytics from 'redux-analytics';
 import track from 'my-awesome-analytics-library';
 
-const middleware = analytics(({ type, payload }, shared) => {
-  track(type, { ...shared, ...payload });
+const middleware = analytics(({ type, payload }, state) => {
+  track(type, { ...state.analytics, ...payload });
 });
 ```
-
-In order to streamline the management of the shared `analytics` data, it's recommended that you write a dedicated analytics reducer with the help of the [combineReducers](https://rackt.github.io/redux/docs/api/combineReducers.html) function.
 
 ## Thanks
 

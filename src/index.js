@@ -7,7 +7,7 @@ export default track => store => next => action => {
 
   const returnValue = next(action);
 
-  track(action.meta.analytics, store.getState().analytics);
+  track(action.meta.analytics, store.getState());
 
   return returnValue;
 };
