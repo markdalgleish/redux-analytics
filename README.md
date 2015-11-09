@@ -55,10 +55,8 @@ The selector function is only invoked if the action has a `meta` property, and i
 
 ```js
 // Given the following middleware configuration:
-const track = ({ type, payload }) => track(type, payload);
 const select = ({ meta }) => meta.foobar;
-
-const middleware = analytics(track, select);
+const middleware = analytics(({ type, payload }) => track(type, payload), select);
 
 // You can then format a trackable action like this:
 const action = {
