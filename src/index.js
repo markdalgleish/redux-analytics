@@ -1,18 +1,25 @@
 import { isFSA } from 'flux-standard-action';
 
-export default track => store => next => action => {
+export default (track, select = ({ meta }) => meta.analytics) => store => next => action => {
   const returnValue = next(action);
 
-  if (!action || !action.meta || !action.meta.analytics) {
+  if (!action || !action.meta) {
     return returnValue;
   }
 
-  if (!isFSA(action.meta.analytics)) {
-    console.error("The following event wasn't tracked because it isn't a Flux Standard Action (https://github.com/acdlite/flux-standard-action)", action.meta.analytics);
+  const event = select(action);
+
+  if (!event) {
     return returnValue;
   }
 
-  track(action.meta.analytics, store.getState());
+  if (!isFSA(event)) {
+    const message = "The following event wasn't tracked because it isn't a Flux Standard Action (https://github.com/acdlite/flux-standard-action)";
+    console.error(message, event);
+    return returnValue;
+  }
+
+  track(event, store.getState());
 
   return returnValue;
 };

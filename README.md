@@ -49,6 +49,28 @@ const middleware = analytics(({ type, payload }, state) => {
 });
 ```
 
+If you'd like to use a different meta property than `analytics`, a custom selector function can be provided as the second argument.
+
+The selector function is only invoked if the action has a `meta` property, and is provided the entire action as an argument. If the selector returns a falsy value, it will be ignored.
+
+```js
+// Given the following middleware configuration:
+const track = ({ type, payload }) => track(type, payload);
+const select = ({ meta }) => meta.foobar;
+
+const middleware = analytics(track, select);
+
+// You can then format a trackable action like this:
+const action = {
+  type: 'MY_ACTION',
+  meta: {
+    foobar: {
+      type: 'my-analytics-event'
+    }
+  }
+};
+```
+
 ## Thanks
 
 [@pavelvolek](https://github.com/pavelvolek) and [@arturmuller](https://github.com/arturmuller) for providing the initial inspiration with [redux-keen](https://github.com/pavelvolek/redux-keen).
