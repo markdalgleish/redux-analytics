@@ -27,7 +27,7 @@ const action = {
 };
 ```
 
-Note that the `analytics` metadata must also be a [Flux Standard Action](https://github.com/acdlite/flux-standard-action).
+Note that the `analytics` metadata must also be a [Flux Standard Action](https://github.com/acdlite/flux-standard-action). If this isn't the case, an error will be printed to the console.
 
 Then, write the middleware to handle the presence of this metadata:
 

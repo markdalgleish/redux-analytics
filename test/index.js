@@ -29,6 +29,9 @@ describe('Given: A Store with analytics middleware', () => {
     store = createStoreWithMiddleware(reducer, initialState);
   });
 
+  beforeEach(() => spy(global.console, 'error'));
+  afterEach(() => global.console.error.restore());
+
   describe('When: An action with analytics meta is dispatched', () => {
 
     beforeEach(() => store.dispatch({
@@ -50,6 +53,10 @@ describe('Given: A Store with analytics middleware', () => {
 
     it('Then: It should only invoke the tracking callback once', () => {
       assert.equal(eventCallbackSpy.callCount, 1);
+    });
+
+    it('Then: It should not provide an error to the console', () => {
+      assert.equal(global.console.error.callCount, 0);
     });
 
   });
@@ -80,6 +87,10 @@ describe('Given: A Store with analytics middleware', () => {
       assert.equal(eventCallbackSpy.callCount, 0);
     });
 
+    it('Then: It should not provide an error to the console', () => {
+      assert.equal(global.console.error.callCount, 0);
+    });
+
   });
 
   describe('When: An action with meta is dispatched, but the meta does not contain an analytics object', () => {
@@ -91,6 +102,10 @@ describe('Given: A Store with analytics middleware', () => {
 
     it('Then: It should not invoke the tracking callback', () => {
       assert.equal(eventCallbackSpy.callCount, 0);
+    });
+
+    it('Then: It should not provide an error to the console', () => {
+      assert.equal(global.console.error.callCount, 0);
     });
 
   });
@@ -108,6 +123,13 @@ describe('Given: A Store with analytics middleware', () => {
 
     it('Then: It should not invoke the tracking callback', () => {
       assert.equal(eventCallbackSpy.callCount, 0);
+    });
+
+    it('Then: It should provide an error to the console', () => {
+      assert.deepEqual(global.console.error.getCall(0).args, [
+        "The following event wasn't tracked because it isn't a Flux Standard Action (https://github.com/acdlite/flux-standard-action)",
+        { not: 'a flux standard action' }
+      ]);
     });
 
   });
