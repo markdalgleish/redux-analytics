@@ -1,6 +1,6 @@
 {
   "name": "redux-analytics",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Analytics middleware for Redux",
   "main": "lib/index.js",
   "scripts": {
