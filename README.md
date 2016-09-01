@@ -8,6 +8,8 @@ Analytics middleware for [Redux](https://github.com/rackt/redux).
 $ npm install --save redux-analytics
 ```
 
+Want to customise your metadata further? Check out [redux-tap](https://github.com/markdalgleish/redux-tap).
+
 ## Usage
 
 First, add some `analytics` metadata to your actions using the [Flux Standard Action](https://github.com/acdlite/flux-standard-action) pattern:
