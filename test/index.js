@@ -61,6 +61,42 @@ describe('Given: A Store with analytics middleware', () => {
 
   });
 
+  describe('When: An action with multiple analytics meta is dispatched', () => {
+
+    beforeEach(() => store.dispatch({
+      type: 'ROUTE_CHANGE',
+      meta: {
+        analytics: [
+          { type: 'page-unload' },
+          { type: 'button-click' }
+        ]
+      }
+    }));
+
+    it('Then: It should invoke the tracking callback with the meta as the first argument', () => {
+      const [ meta0 ] = eventCallbackSpy.getCall(0).args;
+      const [ meta1 ] = eventCallbackSpy.getCall(1).args;
+      assert.deepEqual(meta0, { type: 'page-unload' });
+      assert.deepEqual(meta1, { type: 'button-click' });
+    });
+
+    it('Then: It should invoke the tracking callback with the current state as the second argument', () => {
+      const [, analyticsState0 ] = eventCallbackSpy.getCall(0).args;
+      const [, analyticsState1 ] = eventCallbackSpy.getCall(1).args;
+      assert.deepEqual(analyticsState0, { name: 'jane smith', loggedIn: false });
+      assert.deepEqual(analyticsState1, { name: 'jane smith', loggedIn: false });
+    });
+
+    it('Then: It should invoke the tracking callback exactly times as analytics array length', () => {
+      assert.equal(eventCallbackSpy.callCount, 2);
+    });
+
+    it('Then: It should not provide an error to the console', () => {
+      assert.equal(global.console.error.callCount, 0);
+    });
+
+  });
+
   describe('When: An action with analytics meta is dispatched that updates state', () => {
 
     beforeEach(() => store.dispatch({
