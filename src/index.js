@@ -7,19 +7,25 @@ export default (track, select = ({ meta }) => meta.analytics) => store => next =
     return returnValue;
   }
 
-  const event = select(action);
+  const eventOrEvents = select(action);
 
-  if (!event) {
+  let events = !Array.isArray(eventOrEvents) ? [eventOrEvents] : eventOrEvents;
+  events = events.filter(event => Boolean(event));
+
+  if (!events.length) {
     return returnValue;
   }
 
-  if (!isFSA(event)) {
-    const message = "The following event wasn't tracked because it isn't a Flux Standard Action (https://github.com/acdlite/flux-standard-action)";
-    console.error(message, event);
-    return returnValue;
-  }
+  events.forEach(event => {
+    if (!isFSA(event)) {
+      const message = "The following event wasn't tracked because it isn't a Flux Standard Action (https://github.com/acdlite/flux-standard-action)";
+      console.error(message, event);
+      return;
+    }
 
-  track(event, store.getState());
+    track(event, store.getState());
+  });
+
 
   return returnValue;
 };

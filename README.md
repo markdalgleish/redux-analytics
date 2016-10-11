@@ -27,6 +27,28 @@ const action = {
     }
   }
 };
+
+const actionWithMultipleEvents = {
+  type: 'MY_ACTION',
+  meta: {
+    analytics: [
+      {
+        type: 'my-analytics-event',
+        payload: {
+          some: 'data',
+          more: 'stuff'
+        }
+      },
+      {
+        type: 'my-another-analytics-event',
+        payload: {
+          some: 'more-data',
+          more: 'other-stuff'
+        }
+      }
+    ]
+  }
+};
 ```
 
 Note that the `analytics` metadata must also be a [Flux Standard Action](https://github.com/acdlite/flux-standard-action). If this isn't the case, an error will be printed to the console.
